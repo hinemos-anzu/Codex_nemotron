@@ -118,12 +118,27 @@ def zip_inventory(zpath: Path) -> dict:
     }
 
 
+
+
+def zip_reports_dir(outdir: Path, zip_path: Path) -> dict:
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for file_path in sorted(outdir.rglob("*")):
+            if file_path.is_file() and file_path != zip_path:
+                zf.write(file_path, arcname=str(file_path.relative_to(outdir)))
+    return {
+        "path": str(zip_path),
+        "size_bytes": zip_path.stat().st_size,
+        "sha256": sha256_file(zip_path),
+    }
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Audit Nemotron adapter conversion artifacts.")
     parser.add_argument("--model-path", default=os.getenv("MODEL_PATH", "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1"))
     parser.add_argument("--adapter-path", default=os.getenv("ADAPTER_PATH", "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20"))
     parser.add_argument("--baseline-submission-path", default=os.getenv("BASELINE_SUBMISSION_PATH", "/kaggle/working/submission.zip"))
     parser.add_argument("--outdir", default="reports/conversion_audit")
+    parser.add_argument("--reports-zip-path", default=None, help="Optional zip output path for reports directory")
     return parser.parse_args()
 
 
@@ -181,6 +196,10 @@ def main() -> None:
     (outdir / "svd_error_report.md").write_text(
         "# SVD Error Report\n\n- status: not_computed\n- reason: requires conversion run with original and compressed factors\n"
     )
+
+    reports_zip_path = Path(args.reports_zip_path) if args.reports_zip_path else outdir.parent / "conversion_audit_reports.zip"
+    report["reports_zip"] = zip_reports_dir(outdir, reports_zip_path)
+    (outdir / "reports_zip_inventory.json").write_text(json.dumps(report["reports_zip"], indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ ADAPTER_PATH="${ADAPTER_PATH:-/kaggle/input/models/huikang/nemotron-adapter/tran
 BASELINE_SUBMISSION_PATH="${BASELINE_SUBMISSION_PATH:-/kaggle/working/submission.zip}"
 OUTDIR="${OUTDIR:-/kaggle/working/reports/conversion_audit}"
 AUDIT_SCRIPT="${AUDIT_SCRIPT:-${SCRIPT_DIR}/conversion_audit.py}"
+REPORTS_ZIP_PATH="${REPORTS_ZIP_PATH:-/kaggle/working/conversion_audit_reports.zip}"
 
 if [[ ! -f "${AUDIT_SCRIPT}" ]]; then
   echo "[error] conversion_audit.py not found: ${AUDIT_SCRIPT}" >&2
@@ -29,6 +30,8 @@ fi
 
 mkdir -p "${OUTDIR}"
 
-"${PYTHON_BIN}" "${AUDIT_SCRIPT}"   --model-path "${MODEL_PATH}"   --adapter-path "${ADAPTER_PATH}"   --baseline-submission-path "${BASELINE_SUBMISSION_PATH}"   --outdir "${OUTDIR}"
+"${PYTHON_BIN}" "${AUDIT_SCRIPT}"   --model-path "${MODEL_PATH}"   --adapter-path "${ADAPTER_PATH}"   --baseline-submission-path "${BASELINE_SUBMISSION_PATH}"   --outdir "${OUTDIR}" \
+  --reports-zip-path "${REPORTS_ZIP_PATH}"
 
 printf "\n[done] reports generated under: %s\n" "${OUTDIR}"
+printf "[done] reports zip: %s\n" "${REPORTS_ZIP_PATH}"
