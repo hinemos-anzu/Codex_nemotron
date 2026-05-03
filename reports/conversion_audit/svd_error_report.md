@@ -1,0 +1,4 @@
+# SVD Error Report
+
+- status: not_computed
+- reason: requires conversion run with original and compressed factors
