@@ -1,0 +1,47 @@
+[
+  {
+    "stage": "raw adapter load",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "prefix rename",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "expert unfuse",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "Mamba gate/x merge",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "SVD compression",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "target_modules reconciliation",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "adapter_config rewrite",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "final safetensors export",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  },
+  {
+    "stage": "submission.zip export",
+    "status": "not_executed_in_this_environment",
+    "notes": "instrumentation scaffold only"
+  }
+]
