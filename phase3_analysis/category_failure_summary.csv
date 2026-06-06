@@ -1,0 +1,2 @@
+category,subcategory,n,correct,accuracy,avg_min_logprob,avg_answer_min_logprob,n_wrong_low_conf,n_wrong_high_conf,n_correct_low_conf,priority_score,priority_reason
+ALL,NOT_AVAILABLE,0,0,NOT_AVAILABLE,,,0,0,0,,NOT_AVAILABLE: no validation prediction/logprob rows were provided
