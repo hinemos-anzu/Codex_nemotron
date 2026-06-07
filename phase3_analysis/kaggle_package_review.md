@@ -45,19 +45,19 @@ The uploaded package's generated `category_map.csv` contains 1900 validation row
 
 Important audit finding: the original classifier over-counted `bit_manipulation` because formula expressions such as `t^2` were interpreted as caret/XOR. It also under-specified Roman numeral rows as generic `base_n_conversion`.
 
-## Corrected classifier preview
+## Refined classifier preview
 
-After reviewing the package, the classifier was updated and re-run locally against `phase3_validation_split.csv`. The corrected preview distribution is:
+After reviewing the package, the classifier was updated and re-run locally against `phase3_validation_split.csv`. A second refinement removed symbolic-equation false positives for `&`, `|`, `<<`, and `>>`. The refined preview distribution is:
 
 | category | rows | share |
 |---|---:|---:|
 | numeral_conversion | 640 | 33.7% |
-| bit_manipulation | 418 | 22.0% |
+| bit_manipulation | 335 | 17.6% |
 | arithmetic | 317 | 16.7% |
+| equation | 310 | 16.3% |
 | cipher | 298 | 15.7% |
-| equation | 227 | 11.9% |
 
-Corrected subcategory preview:
+Refined subcategory preview:
 
 | category | subcategory | rows |
 |---|---|---:|
@@ -65,20 +65,15 @@ Corrected subcategory preview:
 | numeral_conversion | roman_numeral | 330 |
 | arithmetic | formula_evaluation | 317 |
 | numeral_conversion | base_n_conversion | 310 |
+| equation | equation_solving | 310 |
 | cipher | cipher | 298 |
-| equation | equation_solving | 227 |
-| bit_manipulation | and | 45 |
-| bit_manipulation | or | 26 |
-| bit_manipulation | unknown | 7 |
-| bit_manipulation | shift_left | 4 |
-| bit_manipulation | shift_right | 1 |
 
 Manual review flags in the corrected preview: 317 rows, corresponding to the arithmetic/formula-evaluation group. These should be reviewed before being used as a targeted next-phase training category.
 
 ## Code updates made from this review
 
 1. Bare `^` is no longer treated as bitwise XOR when it appears as exponent notation such as `t^2`.
-2. `&` and `|` are treated as bit operators only when the prompt has bit/binary/operator context, reducing symbolic-equation false positives.
+2. Symbolic operators `^`, `&`, `|`, `<<`, and `>>` are treated as bit operators only when the prompt has bit/binary/operator context, reducing symbolic-equation false positives.
 3. Roman numeral examples such as `76 -> LXXVI` are detected before generic base conversion.
 4. Physics/formula prompts such as falling-distance examples are classified as `arithmetic/formula_evaluation` and marked for manual review.
 
@@ -90,5 +85,5 @@ Expected first-pass success criteria after rerun:
 
 - `validation_rows = 1900`;
 - `prediction_rows = 0` and `logprob_rows = 0` remain acceptable;
-- category counts should be close to the corrected preview above;
+- category counts should be close to the refined preview above;
 - `phase3_validation_split.manifest.json` should still report `n_total = 9500`, `n_validation = 1900`, `seed = 42`.

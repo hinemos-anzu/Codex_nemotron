@@ -57,11 +57,11 @@ See `phase3_analysis/execution_handoff_plan.md` for the split between repository
 
 ## Kaggle package review
 
-See `phase3_analysis/kaggle_package_review.md` for the review of the uploaded Kaggle `phase3_package.zip`, including split validation, first-pass measurement status, and classifier fixes for caret exponent / Roman numeral cases.
+See `phase3_analysis/kaggle_package_review.md`, `phase3_analysis/kaggle_package_2_review.md`, and `phase3_analysis/kaggle_package_3_review.md` for reviews of the uploaded Kaggle packages, including split validation, first-pass measurement status, and classifier fixes for caret exponent / Roman numeral / symbolic-operator cases.
 
 ## Troubleshooting
 
-See `phase3_analysis/troubleshooting.md` if the Kaggle notebook raises `FileNotFoundError`, creates an empty category map, or reports `NOT_AVAILABLE` metrics in the first pass.
+See `phase3_analysis/troubleshooting.md` if the Kaggle notebook raises `FileNotFoundError`, reports `validation_rows: 0`, creates an empty category map, or reports `NOT_AVAILABLE` metrics in the first pass.
 
 ## Classification rules
 

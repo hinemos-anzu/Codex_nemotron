@@ -56,11 +56,28 @@ Expected populated outputs:
 - `phase3_analysis/category_map.csv`
 - `phase3_analysis/validation_set_labeled.csv`
 
-## 3. If Golden accuracy is `NOT_AVAILABLE`
+## 3. If `validation_rows` is `0`
+
+This means the notebook did not receive a validation CSV and did not create one from `train.csv`. In the uploaded `phase3_package (1).zip`, `run_commands.md` showed `Validation path: NOT_PROVIDED`, and `category_map.csv` contained only the header. That run is safe, but it is not useful for category analysis.
+
+Fix the `NOTEBOOK_CONFIG` block and rerun:
+
+```python
+"create_validation_split": True,
+"train_source": "/kaggle/input/nvidia-nemotron-3-reasoning-challenge/train.csv",
+"validation_output": "/kaggle/working/phase3_validation_split.csv",
+"validation": "",
+"predictions": "",
+"logprobs": "",
+```
+
+If your Kaggle mount path differs, update `train_source` to the actual path shown under `/kaggle/input`. A successful first-pass run should report `validation_rows: 1900` for the 20% split of the 9500-row train file.
+
+## 4. If Golden accuracy is `NOT_AVAILABLE`
 
 This is expected in the first pass when `predictions` and `logprobs` are blank. The first pass is category-map/CV-design only and intentionally does not modify Golden Baseline logging.
 
-## 4. If you see `fatal: not a git repository` after successful output
+## 5. If you see `fatal: not a git repository` after successful output
 
 This message is benign in Kaggle when the notebook is not running inside a Git checkout. The Phase3 script only tries to record a git hash in `run_commands.md`; if no `.git` directory exists, the hash is recorded as `NOT_AVAILABLE`.
 
@@ -75,7 +92,7 @@ The notebook run is still successful if the JSON manifest was printed and the sa
 
 The script now suppresses this Git stderr message and silently records `NOT_AVAILABLE` for the git hash outside a repository.
 
-## 5. If you need help debugging
+## 6. If you need help debugging
 
 Please share the traceback text, especially:
 

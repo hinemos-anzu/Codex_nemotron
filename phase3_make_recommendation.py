@@ -305,13 +305,12 @@ def classify_question(question: str) -> Dict[str, Any]:
     # a strong bit signal.
     bit_context = any(x in low for x in ["bit", "binary", "xor", "mask", "signed", "unsigned", "operator", "operation"])
     caret_is_exponent = bool(re.search(r"\b[a-zA-Z]\s*\^\s*\d+\b", q))
-    operator_hits = [tok for tok in ["<<", ">>"] if tok in q]
-    if bit_context:
-        operator_hits.extend(tok for tok in ["&", "|"] if tok in q)
+    operator_hits = [tok for tok in ["<<", ">>", "&", "|"] if tok in q and bit_context]
     caret_hit = "^" in q and bit_context and not caret_is_exponent
-    strong_hits = [h for h in hits if h != "^"]
+    symbolic_bit_tokens = {"^", "&", "|", "<<", ">>"}
+    strong_hits = [h for h in hits if h not in symbolic_bit_tokens or bit_context]
     if strong_hits or operator_hits or caret_hit:
-        filtered_hits = [h for h in hits if h != "^" or caret_hit]
+        filtered_hits = [h for h in hits if h not in symbolic_bit_tokens or bit_context or (h == "^" and caret_hit)]
         if operator_hits:
             filtered_hits.extend(tok for tok in operator_hits if tok not in filtered_hits)
         if caret_hit and "^" not in filtered_hits:
@@ -597,6 +596,17 @@ def write_docs(outdir: Path, args: argparse.Namespace, generated: List[str], sum
     accuracy = summaries.get("accuracy", "NOT_AVAILABLE")
     parse_rate = summaries.get("parse_rate", "NOT_AVAILABLE")
     n_total = summaries.get("n_total", 0)
+    validation_count = summaries.get("validation_rows", n_total)
+    status_label = (
+        "MEASURED_FROM_LOCAL_LOGS"
+        if measured else
+        ("CATEGORY_MAP_ONLY_NO_PREDICTION_LOGS" if validation_count else "NOT_MEASURED_NO_VALIDATION_OR_PREDICTION_LOGS")
+    )
+    recommendation_status = (
+        "MEASURED_FROM_LOCAL_LOGS"
+        if measured else
+        ("CATEGORY_MAP_ONLY: validation rows present but prediction/logprob inputs were not supplied" if validation_count else "NOT_MEASURED: validation/prediction/logprob inputs were not present in this repository")
+    )
     cat_table = summaries.get("category_failure_rows", [])[:10]
     fail_rows = summaries.get("failure_type_rows", [])[:10]
 
@@ -670,10 +680,10 @@ Ambiguous rows are marked `manual_review_required=True` instead of being silentl
 
 ## Measurement status
 
-- Validation rows analyzed: `{n_total}`
+- Validation rows analyzed: `{validation_count}`
 - Golden validation accuracy: `{accuracy}`
 - Parse success rate: `{parse_rate}`
-- Status: `{'MEASURED_FROM_LOCAL_LOGS' if measured else 'NOT_MEASURED_NO_VALIDATION_OR_PREDICTION_LOGS'}`
+- Status: `{status_label}`
 """
     (outdir / "README.md").write_text(readme, encoding="utf-8")
 
@@ -776,10 +786,10 @@ Actual command line captured by script:
 
 ### Facts from local artifacts
 
-- Validation件数: `{n_total}`
+- Validation件数: `{validation_count}`
 - Golden accuracy: `{accuracy}`
 - Parse success rate: `{parse_rate}`
-- Measurement status: `{'MEASURED_FROM_LOCAL_LOGS' if measured else 'NOT_MEASURED: validation/prediction/logprob inputs were not present in this repository'}`
+- Measurement status: `{recommendation_status}`
 
 ### Unconfirmed / not measured in this run
 
@@ -985,6 +995,7 @@ def main() -> None:
         "parse_rate": overall.get("parse_success_rate", "NOT_AVAILABLE"),
         "category_failure_rows": cat_failure_rows,
         "failure_type_rows": failure_type_rows,
+        "validation_rows": len(validation_rows),
     })
 
     # Regenerate generated list after docs were written.
