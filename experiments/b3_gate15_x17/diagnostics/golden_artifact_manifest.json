@@ -1,0 +1,182 @@
+{
+  "manifest_schema_version": 1,
+  "created_utc": "2026-06-08T01:44:08.743921Z",
+  "purpose": "Golden Baseline protection manifest only; no code, adapter, submission.zip, SFT, or Kaggle submit changes performed.",
+  "golden_baseline": {
+    "public_lb": "0.86 (user-provided)",
+    "priority": "Do not modify Golden Baseline artifacts.",
+    "notebook_or_script": {
+      "path": "b3-nemotron-svd-26042701.ipynb",
+      "exists": true,
+      "size_bytes": 56304,
+      "sha256": "2aeb49d80cf4430a57dafe0626b648e60f5127da5aa0cd326d889e75577968b5"
+    },
+    "detected_notebook_or_script_role": "Golden Baseline candidate for Nemotron SVD/submission workflow based on filename and notebook contents.",
+    "kaggle_model_path_from_prior_audit": "/kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1",
+    "kaggle_adapter_dir_from_prior_audit": "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20",
+    "kaggle_submission_zip_path_from_prior_audit": "/kaggle/working/submission.zip"
+  },
+  "golden_artifacts": {
+    "adapter_model_safetensors": {
+      "path_from_prior_audit": "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20/adapter_model.safetensors",
+      "available_in_this_repo": false,
+      "size_bytes_from_prior_audit": 1544348352,
+      "sha256": "179202c3305332f080e7f3cef17268b08250773b48e6cc73b5e8c0d424be88b8",
+      "sha256_source": "conversion_audit_reports.zip embedded prior Kaggle audit; actual safetensors file is not present in this repo."
+    },
+    "adapter_config_json": {
+      "path_from_prior_audit": "/kaggle/input/models/huikang/nemotron-adapter/transformers/default/20/adapter_config.json",
+      "available_in_this_repo": false,
+      "actual_file_sha256": null,
+      "actual_file_sha256_status": "unavailable: adapter_config.json is not present in this repo; Golden Kaggle input is referenced only by prior audit metadata.",
+      "embedded_config_canonical_json_sha256": "e2bda1f81231ae5ac76a4ec051e4c59a7b0c497cdc32e9b6f78f01cdf420e13c",
+      "embedded_config_canonical_json_sha256_note": "Hash of canonicalized adapter_config content embedded in prior audit, not a byte-for-byte file hash.",
+      "embedded_config": {
+        "alpha_pattern": {},
+        "auto_mapping": null,
+        "base_model_name_or_path": null,
+        "bias": "none",
+        "corda_config": null,
+        "eva_config": null,
+        "exclude_modules": null,
+        "fan_in_fan_out": false,
+        "inference_mode": false,
+        "init_lora_weights": true,
+        "layer_replication": null,
+        "layers_pattern": null,
+        "layers_to_transform": null,
+        "loftq_config": {},
+        "lora_alpha": 32,
+        "lora_bias": false,
+        "lora_dropout": 0,
+        "megatron_config": null,
+        "megatron_core": "megatron.core",
+        "modules_to_save": null,
+        "peft_type": "LORA",
+        "r": 32,
+        "rank_pattern": {},
+        "revision": null,
+        "target_modules": "all-linear",
+        "task_type": "CAUSAL_LM",
+        "trainable_token_indices": null,
+        "use_dora": false,
+        "use_rslora": false
+      }
+    },
+    "submission_zip": {
+      "path_from_prior_audit": "/kaggle/working/submission.zip",
+      "available_in_this_repo": false,
+      "sha256": null,
+      "status": "not present in this repo / prior audit zip_inventory.exists=false",
+      "prior_audit_zip_inventory": {
+        "exists": false
+      }
+    },
+    "local_lb086_csv_reference": {
+      "path": "submission_lb0.86.csv",
+      "exists": true,
+      "size_bytes": 564382,
+      "sha256": "c7d52374489fc3bee9a4e90c354e5a9da29378cd1d698accce8eb60f92d3ed39"
+    },
+    "prior_audit_report_zip_reference": {
+      "path": "conversion_audit_reports.zip",
+      "exists": true,
+      "size_bytes": 5813,
+      "sha256": "510cffba5aec0fe36e0fd4d7c6c585eedc29d2f40750e89ceb49ddceaed7783d",
+      "entries": [
+        {
+          "name": "baseline_adapter_inventory.json",
+          "file_size": 27862,
+          "compress_size": 2201,
+          "crc": 2096774567
+        },
+        {
+          "name": "baseline_adapter_inventory.md",
+          "file_size": 26621,
+          "compress_size": 2215,
+          "crc": 587560726
+        },
+        {
+          "name": "conversion_stage_log.json",
+          "file_size": 1262,
+          "compress_size": 226,
+          "crc": 81709396
+        },
+        {
+          "name": "conversion_stage_log.md",
+          "file_size": 815,
+          "compress_size": 209,
+          "crc": 3437351879
+        },
+        {
+          "name": "svd_error_report.json",
+          "file_size": 106,
+          "compress_size": 90,
+          "crc": 763547150
+        },
+        {
+          "name": "svd_error_report.md",
+          "file_size": 114,
+          "compress_size": 98,
+          "crc": 2770947041
+        }
+      ]
+    }
+  },
+  "readable_parameters": {
+    "rank_map_from_notebook": {
+      "o_proj": 32,
+      "out_proj": 32,
+      "k_proj": 32,
+      "in_proj": 32,
+      "down_proj": 22,
+      "up_proj": 22,
+      "q_proj": 32,
+      "v_proj": 32,
+      "gate_proj": 16,
+      "x_proj": 16,
+      "default": 24
+    },
+    "target_modules_from_notebook_canonical_list": [
+      "k_proj",
+      "o_proj",
+      "in_proj",
+      "q_proj",
+      "up_proj",
+      "v_proj",
+      "down_proj",
+      "out_proj",
+      "lm_head"
+    ],
+    "target_modules_from_prior_audit_adapter_config": "all-linear",
+    "module_tensor_count_from_prior_audit": {
+      "gate_proj": 46,
+      "out_proj": 46,
+      "x_proj": 46,
+      "other": 138,
+      "down_proj": 46,
+      "up_proj": 46,
+      "k_proj": 12,
+      "o_proj": 12,
+      "q_proj": 12,
+      "v_proj": 12,
+      "lm_head": 2
+    },
+    "rank_distribution_from_prior_audit": {
+      "32": 140
+    },
+    "clean_submission_zip_expected_entries_from_notebook": [
+      "adapter_model.safetensors",
+      "adapter_config.json"
+    ],
+    "golden_submission_zip_entries": []
+  },
+  "non_modification_assertions": [
+    "Did not edit Golden notebook/script.",
+    "Did not edit or create adapter_model.safetensors.",
+    "Did not edit or create adapter_config.json.",
+    "Did not create submission.zip.",
+    "Did not run SFT/training.",
+    "Did not submit to Kaggle."
+  ]
+}
