@@ -305,3 +305,57 @@ Notebook creation explicitly did **not** run:
 # No SFT/training
 # No Kaggle submission
 ```
+
+## Prompt4-Kaggle notebook syntax hotfix
+
+Execution datetime: 2026-06-08 UTC in the local `/workspace/Codex_nemotron` environment.
+
+```bash
+python - <<'PY'
+import json
+from pathlib import Path
+p=Path('experiments/b3_gate15_x17/b3_gate15_x17_kaggle_prompt4.ipynb')
+nb=json.loads(p.read_text())
+for i,c in enumerate(nb['cells'],1):
+    if c['cell_type']=='code':
+        compile(''.join(c['source']), f'cell{i}', 'exec')
+PY
+python - <<'PY'
+# Fixed escaped-newline string literals in the generated notebook utilities/report cells.
+PY
+python - <<'PY'
+import json
+from pathlib import Path
+p=Path('experiments/b3_gate15_x17/b3_gate15_x17_kaggle_prompt4.ipynb')
+nb=json.loads(p.read_text())
+text=p.read_text()
+assert len(nb['cells']) == 11
+for i,c in enumerate(nb['cells'],1):
+    if c['cell_type']=='code':
+        compile(''.join(c['source']), f'cell{i}', 'exec')
+for term in ['pip install','git clone','requests.get','wget','curl','kagglehub']:
+    assert term not in text, term
+for term in ['GATE_COMPONENT_RANK = 15','X_COMPONENT_RANK = 17','IN_PROJ_TOTAL_RANK = 32','SOURCE_GOLDEN_NOTEBOOK','SOURCE_PATCHED_SCRIPT','/kaggle/working/experiments/b3_gate15_x17/submission.zip']:
+    assert term in text, term
+print('notebook validation passed')
+PY
+python -m py_compile experiments/b3_gate15_x17/b3_gate15_x17.py
+rm -rf experiments/b3_gate15_x17/__pycache__
+git diff --name-only -- b3-nemotron-svd-26042701.ipynb
+test ! -e submission.zip && test ! -e adapter_model.safetensors && test ! -e adapter_config.json
+test ! -e /kaggle/working/submission.zip && test ! -e /kaggle/working/adapter_model.safetensors && test ! -e /kaggle/working/adapter_config.json
+git diff --check
+```
+
+Notebook syntax hotfix explicitly did **not** run:
+
+```bash
+# No execution of the generated notebook's candidate-generation cells
+# No execution of python experiments/b3_gate15_x17/b3_gate15_x17.py
+# No build_b3_adapter() execution
+# No adapter generation
+# No adapter_config.json generation
+# No submission.zip creation
+# No SFT/training
+# No Kaggle submission
+```

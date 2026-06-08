@@ -90,3 +90,17 @@ The notebook checks direct `/kaggle/working` artifact pollution before generatio
 - Did not generate `submission.zip`.
 - Did not run SFT/training.
 - Did not submit to Kaggle.
+
+## Syntax hotfix validation
+
+After the initial notebook creation, the generated notebook was re-validated by compiling every code cell with Python `compile(...)`. This caught and fixed an escaped-newline rendering issue in notebook code cells where `"\n"` had been emitted as a literal line break inside string literals.
+
+Post-fix validation results:
+
+- All code cells compile successfully.
+- Notebook JSON still loads successfully.
+- Notebook still has 11 cells.
+- Prohibited token check still passes.
+- Required provenance constants are still present.
+- Required gate/x rank constants are still present.
+- No local adapter or submission artifacts were generated during the fix.
