@@ -60,3 +60,15 @@ The notebook contains two validation stages:
 - Did not copy candidate zip to `/kaggle/working/submission.zip`.
 - Did not run SFT/training.
 - Did not submit to Kaggle.
+
+## Prompt5A missing-artifact STOP clarification
+
+The Prompt5 validation notebook now writes a more explicit `STOP_REPORT_PROMPT5A` payload when candidate artifacts are missing. This case usually means Prompt5 was started in a fresh Kaggle session where `/kaggle/working/experiments/b3_gate15_x17/` does not contain the Prompt4 outputs. Kaggle `/kaggle/working` is session-scoped, so Prompt4 must be run in the same session, or the generated experiment directory must be attached/copied back before Prompt5.
+
+The clarified STOP details include:
+
+- expected base directory
+- expected candidate file paths
+- likely cause
+- recovery steps
+- forbidden recovery actions such as copy-to-root or Kaggle Submit

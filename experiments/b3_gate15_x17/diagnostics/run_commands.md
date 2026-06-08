@@ -412,3 +412,46 @@ Prompt5 validation notebook creation explicitly did **not** run:
 # No SFT/training
 # No Kaggle submission
 ```
+
+## Prompt5A missing-artifact STOP clarification
+
+Execution datetime: 2026-06-08 UTC in the local `/workspace/Codex_nemotron` environment.
+
+```bash
+python - <<'PY'
+# Updated Prompt5 validation notebook so missing candidate artifacts produce
+# a clearer STOP_REPORT_PROMPT5A with likely cause and recovery steps.
+PY
+python - <<'PY'
+import json
+from pathlib import Path
+p=Path('experiments/b3_gate15_x17/b3_gate15_x17_kaggle_prompt5_validation.ipynb')
+nb=json.loads(p.read_text())
+for i,c in enumerate(nb['cells'],1):
+    if c['cell_type']=='code':
+        compile(''.join(c['source']), f'cell{i}', 'exec')
+text=p.read_text()
+for term in ['likely_cause','recovery_steps','forbidden_recovery_actions','Do not copy to /kaggle/working/submission.zip yet.']:
+    assert term in text, term
+print('prompt5 missing-artifact clarification validation passed')
+PY
+python -m py_compile experiments/b3_gate15_x17/b3_gate15_x17.py
+rm -rf experiments/b3_gate15_x17/__pycache__
+git diff --name-only -- b3-nemotron-svd-26042701.ipynb
+test ! -e submission.zip && test ! -e adapter_model.safetensors && test ! -e adapter_config.json
+test ! -e /kaggle/working/submission.zip && test ! -e /kaggle/working/adapter_model.safetensors && test ! -e /kaggle/working/adapter_config.json
+git diff --check
+```
+
+Prompt5A STOP clarification explicitly did **not** run:
+
+```bash
+# No execution of the generated Prompt5 validation notebook in local Codex
+# No safetensors scan in local Codex
+# No adapter generation
+# No adapter_config.json generation
+# No submission.zip generation or regeneration
+# No copy to /kaggle/working/submission.zip
+# No SFT/training
+# No Kaggle submission
+```
