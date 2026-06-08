@@ -455,3 +455,32 @@ Prompt5A STOP clarification explicitly did **not** run:
 # No SFT/training
 # No Kaggle submission
 ```
+
+## Prompt5 audit evaluation report creation
+
+Execution datetime: 2026-06-08 UTC in the local `/workspace/Codex_nemotron` environment.
+
+```bash
+cat > experiments/b3_gate15_x17/diagnostics/prompt5_evaluation_for_audit.md <<'EOF_REPORT'
+# Prompt5 Evaluation Report for Audit Agent
+EOF_REPORT
+python -m py_compile experiments/b3_gate15_x17/b3_gate15_x17.py
+rm -rf experiments/b3_gate15_x17/__pycache__
+git diff --name-only -- b3-nemotron-svd-26042701.ipynb
+test ! -e submission.zip && test ! -e adapter_model.safetensors && test ! -e adapter_config.json
+test ! -e /kaggle/working/submission.zip && test ! -e /kaggle/working/adapter_model.safetensors && test ! -e /kaggle/working/adapter_config.json
+git diff --check
+```
+
+Prompt5 audit report creation explicitly did **not** run:
+
+```bash
+# No execution of Kaggle Prompt4 or Prompt5 notebooks in local Codex
+# No safetensors scan in local Codex
+# No adapter generation
+# No adapter_config.json generation
+# No submission.zip generation or regeneration
+# No copy to /kaggle/working/submission.zip
+# No SFT/training
+# No Kaggle submission
+```
